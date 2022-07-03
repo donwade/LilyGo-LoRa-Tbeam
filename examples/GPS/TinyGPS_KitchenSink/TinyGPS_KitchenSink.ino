@@ -25,37 +25,46 @@ void setup()
     Serial.println();
 }
 
+static bool bNeedCrlf = false;
+
 void loop()
 {
+//    if (bNeedCrlf) Serial.println();
+    bNeedCrlf = false;
+
     // This sketch displays information every time a new sentence is correctly encoded.
     while (Serial1.available() > 0)
         gps.encode(Serial1.read());
 
 
     if (gps.location.isUpdated()) {
-        Serial.print(F("LOCATION   Fix Age="));
-        Serial.print(gps.location.age());
-        Serial.print(F("ms Raw Lat="));
-        Serial.print(gps.location.rawLat().negative ? "-" : "+");
-        Serial.print(gps.location.rawLat().deg);
-        Serial.print("[+");
-        Serial.print(gps.location.rawLat().billionths);
-        Serial.print(F(" billionths],  Raw Long="));
-        Serial.print(gps.location.rawLng().negative ? "-" : "+");
-        Serial.print(gps.location.rawLng().deg);
-        Serial.print("[+");
-        Serial.print(gps.location.rawLng().billionths);
-        Serial.print(F(" billionths],  Lat="));
+        bNeedCrlf = true;
+        //Serial.print(F("LOCATION   Fix Age="));
+        //Serial.print(gps.location.age());
+        //Serial.print(F("ms Raw Lat="));
+        //Serial.print(gps.location.rawLat().negative ? "-" : "+");
+        //Serial.print(gps.location.rawLat().deg);
+
+        //Serial.print("[+");
+        //Serial.print(gps.location.rawLat().billionths);
+        //Serial.print(F(" billionths],  Raw Long="));
+        //Serial.print(gps.location.rawLng().negative ? "-" : "+");
+        //Serial.print(gps.location.rawLng().deg);
+        //Serial.print("[+");
+        //Serial.print(gps.location.rawLng().billionths);
+        //Serial.print(F(" billionths],  Lat="));
+        Serial.print(F(" Lat="));
         Serial.print(gps.location.lat(), 6);
         Serial.print(F(" Long="));
         Serial.println(gps.location.lng(), 6);
     }
 
     else if (gps.date.isUpdated()) {
-        Serial.print(F("DATE       Fix Age="));
-        Serial.print(gps.date.age());
-        Serial.print(F("ms Raw="));
-        Serial.print(gps.date.value());
+        bNeedCrlf = true;
+        //Serial.print(F("DATE       Fix Age="));
+        //Serial.print(gps.date.age());
+        //Serial.print(F("ms Raw="));
+        //Serial.print(gps.date.value());
         Serial.print(F(" Year="));
         Serial.print(gps.date.year());
         Serial.print(F(" Month="));
@@ -65,10 +74,12 @@ void loop()
     }
 
     else if (gps.time.isUpdated()) {
-        Serial.print(F("TIME       Fix Age="));
-        Serial.print(gps.time.age());
-        Serial.print(F("ms Raw="));
-        Serial.print(gps.time.value());
+        bNeedCrlf = true;
+//        Serial.print(F("TIME       Fix Age="));
+//        Serial.print(gps.time.age());
+//        Serial.print(F("ms Raw="));
+//        Serial.print(gps.time.value());
+
         Serial.print(F(" Hour="));
         Serial.print(gps.time.hour());
         Serial.print(F(" Minute="));
@@ -80,10 +91,11 @@ void loop()
     }
 
     else if (gps.speed.isUpdated()) {
-        Serial.print(F("SPEED      Fix Age="));
-        Serial.print(gps.speed.age());
-        Serial.print(F("ms Raw="));
-        Serial.print(gps.speed.value());
+        bNeedCrlf = true;
+//        Serial.print(F("SPEED      Fix Age="));
+//        Serial.print(gps.speed.age());
+//        Serial.print(F("ms Raw="));
+//        Serial.print(gps.speed.value());
         Serial.print(F(" Knots="));
         Serial.print(gps.speed.knots());
         Serial.print(F(" MPH="));
@@ -95,19 +107,21 @@ void loop()
     }
 
     else if (gps.course.isUpdated()) {
-        Serial.print(F("COURSE     Fix Age="));
-        Serial.print(gps.course.age());
-        Serial.print(F("ms Raw="));
-        Serial.print(gps.course.value());
+        bNeedCrlf = true;
+//        Serial.print(F("COURSE     Fix Age="));
+//        Serial.print(gps.course.age());
+//        Serial.print(F("ms Raw="));
+//        Serial.print(gps.course.value());
         Serial.print(F(" Deg="));
         Serial.println(gps.course.deg());
     }
 
     else if (gps.altitude.isUpdated()) {
-        Serial.print(F("ALTITUDE   Fix Age="));
-        Serial.print(gps.altitude.age());
-        Serial.print(F("ms Raw="));
-        Serial.print(gps.altitude.value());
+        bNeedCrlf = true;
+//        Serial.print(F("ALTITUDE   Fix Age="));
+//        Serial.print(gps.altitude.age());
+//        Serial.print(F("ms Raw="));
+//        Serial.print(gps.altitude.value());
         Serial.print(F(" Meters="));
         Serial.print(gps.altitude.meters());
         Serial.print(F(" Miles="));
@@ -119,22 +133,27 @@ void loop()
     }
 
     else if (gps.satellites.isUpdated()) {
-        Serial.print(F("SATELLITES Fix Age="));
-        Serial.print(gps.satellites.age());
-        Serial.print(F("ms Value="));
+        bNeedCrlf = true;
+//        Serial.print(F("SATELLITES Fix Age="));
+//        Serial.print(gps.satellites.age());
+//        Serial.print(F("ms Value="));
+        Serial.println();
+        Serial.print(F("SATELLITES found ="));
         Serial.println(gps.satellites.value());
     }
 
     else if (gps.hdop.isUpdated()) {
-        Serial.print(F("HDOP       Fix Age="));
-        Serial.print(gps.hdop.age());
-        Serial.print(F("ms raw="));
-        Serial.print(gps.hdop.value());
+        bNeedCrlf = true;
+//        Serial.print(F("HDOP       Fix Age="));
+//        Serial.print(gps.hdop.age());
+//        Serial.print(F("ms raw="));
+//        Serial.print(gps.hdop.value());
         Serial.print(F(" hdop="));
         Serial.println(gps.hdop.hdop());
     }
 
     else if (millis() - last > 5000) {
+        bNeedCrlf = true;
         Serial.println();
         if (gps.location.isValid()) {
             static const double LONDON_LAT = 51.508131, LONDON_LON = -0.128002;
